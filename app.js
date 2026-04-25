@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE", // PALITAN MO ITO NG API KEY MO
+  apiKey: "YOUR_API_KEY_HERE",
   authDomain: "tayoapp-c8f3f.firebaseapp.com",
   projectId: "tayoapp-c8f3f",
   storageBucket: "tayoapp-c8f3f.appspot.com",
@@ -14,51 +14,42 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const remindersCol = collection(db, 'reminders');
 
-// ADD PING
+// BROADCAST ACTION
 document.getElementById('addBtn').addEventListener('click', async () => {
-    const task = document.getElementById('taskInput').value;
-    const friend = document.getElementById('friendInput').value;
+    const taskInput = document.getElementById('taskInput');
+    const friendInput = document.getElementById('friendInput');
     
-    if(task && friend) {
+    if(taskInput.value && friendInput.value) {
         await addDoc(remindersCol, {
-            task_name: task,
-            tagged_friend: friend,
+            task_name: taskInput.value,
+            tagged_friend: friendInput.value,
             timestamp: new Date()
         });
-        document.getElementById('taskInput').value = '';
-        document.getElementById('friendInput').value = '';
-    } else {
-        alert("Paki-lagay ang task at friend!");
+        taskInput.value = '';
+        friendInput.value = '';
     }
 });
 
-// DELETE PING
+// GLOBAL DELETE FUNCTION
 window.deletePing = async (id) => {
-    if(confirm("Burahin itong ping?")) {
-        await deleteDoc(doc(db, "reminders", id));
-    }
+    if(confirm("Confirm deletion?")) await deleteDoc(doc(db, "reminders", id));
 };
 
-// LISTEN FOR CHANGES
+// LIVE SYNC
 const q = query(remindersCol, orderBy("timestamp", "desc"));
 onSnapshot(q, (snapshot) => {
     const list = document.getElementById('reminderList');
-    list.innerHTML = "";
+    list.innerHTML = snapshot.empty ? `<p style="color: #475569">Your timeline is quiet...</p>` : "";
     
-    if (snapshot.empty) {
-        list.innerHTML = "<p style='color: #475569'>No active pings. Start tagging your crew!</p>";
-    }
-
     snapshot.forEach(snap => {
         const data = snap.data();
-        const id = snap.id;
         list.innerHTML += `
-            <div class="ping-item">
+            <div class="ping-card">
                 <div class="ping-content">
                     <b>${data.task_name}</b>
-                    <span>${data.tagged_friend.startsWith('@') ? data.tagged_friend : '@'+data.tagged_friend}</span>
+                    <span class="ping-tag">${data.tagged_friend.startsWith('@') ? data.tagged_friend : '@'+data.tagged_friend}</span>
                 </div>
-                <button class="del-btn" onclick="deletePing('${id}')">✕</button>
+                <button class="del-btn" onclick="deletePing('${snap.id}')">×</button>
             </div>`;
     });
 });
