@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TayoApp Prototype</title>
+    <title>TayoApp | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #f4f4f9; }
-        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        input { width: 90%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; }
-        button { width: 100%; padding: 10px; background: #ffa000; border: none; color: white; font-weight: bold; cursor: pointer; }
-        #reminderList { margin-top: 20px; }
-        .card { background: #fffde7; padding: 10px; border-left: 5px solid #ffa000; margin-bottom: 10px; }
+        :root { --primary: #5A67D8; --bg: #F7FAFC; --card: #FFFFFF; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #2D3748; }
+        .dashboard { max-width: 900px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h2 { margin-top: 0; font-size: 1.2rem; color: var(--primary); }
+        
+        /* Form Styles */
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #E2E8F0; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #434190; }
+
+        /* Reminder List Styles */
+        .reminder-item { border-bottom: 1px solid #EDF2F7; padding: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+        .reminder-info b { display: block; font-size: 1rem; }
+        .reminder-info span { font-size: 0.8rem; color: #718096; }
+        .tag { background: #EBF4FF; color: #4299E1; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>TayoApp 🤝</h2>
-        <input type="text" id="taskInput" placeholder="Anong gagawin niyo?">
-        <input type="text" id="friendInput" placeholder="Sino itatag mo?">
-        <button id="addBtn">Add Reminder</button>
-        <div id="reminderList"></div>
+
+    <div class="dashboard">
+        <div class="card">
+            <h2>Add New Reminder 🤝</h2>
+            <input type="text" id="taskInput" placeholder="What's the task?">
+            <input type="text" id="friendInput" placeholder="Tag a friend (@name)">
+            <button id="addBtn">Save to Schedule</button>
+        </div>
+
+        <div class="card">
+            <h2>Upcoming Reminders</h2>
+            <div id="reminderList">
+                </div>
+        </div>
     </div>
 
     <script type="module" src="app.js"></script>
