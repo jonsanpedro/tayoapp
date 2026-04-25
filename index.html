@@ -3,43 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TayoApp | Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>PingPal Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #5A67D8; --bg: #F7FAFC; --card: #FFFFFF; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #2D3748; }
-        .dashboard { max-width: 900px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .card { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        h2 { margin-top: 0; font-size: 1.2rem; color: var(--primary); }
+        :root { --sidebar-w: 280px; --accent: #8B5CF6; --bg: #0B0E14; --glass: rgba(255, 255, 255, 0.03); }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: white; margin: 0; display: flex; min-height: 100vh; }
         
-        /* Form Styles */
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #E2E8F0; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #434190; }
+        /* Sidebar */
+        aside { width: var(--sidebar-w); background: #11141B; border-right: 1px solid rgba(255,255,255,0.05); padding: 30px; display: flex; flex-direction: column; position: fixed; height: 100vh; }
+        .profile-section { text-align: center; margin-bottom: 40px; }
+        .avatar { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent); margin-bottom: 15px; background: #2D3748; display: inline-flex; align-items: center; justify-content: center; font-size: 2rem; }
+        .stats { display: flex; justify-content: space-around; margin-top: 20px; font-size: 0.8rem; color: #94A3B8; }
+        .stats b { color: white; display: block; font-size: 1.1rem; }
+        
+        nav a { display: block; padding: 12px 15px; color: #94A3B8; text-decoration: none; border-radius: 10px; margin-bottom: 5px; transition: 0.3s; }
+        nav a.active, nav a:hover { background: var(--glass); color: white; }
 
-        /* Reminder List Styles */
-        .reminder-item { border-bottom: 1px solid #EDF2F7; padding: 10px 0; display: flex; justify-content: space-between; align-items: center; }
-        .reminder-info b { display: block; font-size: 1rem; }
-        .reminder-info span { font-size: 0.8rem; color: #718096; }
-        .tag { background: #EBF4FF; color: #4299E1; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; }
+        /* Main Content */
+        main { margin-left: var(--sidebar-w); flex: 1; padding: 40px; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .search-box { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 12px; width: 400px; }
+        .search-box input { background: none; border: none; color: white; width: 100%; outline: none; }
+
+        .content-grid { display: grid; grid-template-columns: 1fr 350px; gap: 30px; }
+        
+        /* Cards */
+        .glass-card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; backdrop-filter: blur(10px); }
+        .ping-input input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid #334155; padding: 15px; border-radius: 12px; color: white; margin-bottom: 15px; box-sizing: border-box; }
+        .btn-ping { width: 100%; padding: 15px; background: linear-gradient(135deg, #8B5CF6, #6366F1); border: none; border-radius: 12px; color: white; font-weight: 700; cursor: pointer; }
+
+        /* Ping Items */
+        .ping-item { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent); }
+        .ping-info b { font-size: 1.1rem; display: block; }
+        .ping-info span { color: #8B5CF6; font-size: 0.85rem; font-weight: 600; }
+        .delete-btn { background: none; border: none; color: #4A5568; cursor: pointer; font-size: 1.2rem; }
+        .delete-btn:hover { color: #F87171; }
     </style>
 </head>
 <body>
 
-    <div class="dashboard">
-        <div class="card">
-            <h2>Add New Reminder 🤝</h2>
-            <input type="text" id="taskInput" placeholder="What's the task?">
-            <input type="text" id="friendInput" placeholder="Tag a friend (@name)">
-            <button id="addBtn">Save to Schedule</button>
+    <aside>
+        <div class="profile-section">
+            <div class="avatar">👨‍💻</div>
+            <h3 style="margin: 5px 0;">Jonas San Pedro</h3>
+            <p style="color: #6366F1; font-size: 0.8rem; margin: 0;">@jonas_it</p>
+            <div class="stats">
+                <div><b>128</b> Friends</div>
+                <div><b>42</b> Pings</div>
+            </div>
+        </div>
+        <nav>
+            <a href="#" class="active">🏠 Dashboard</a>
+            <a href="#">👥 Friends</a>
+            <a href="#">⚙️ Settings</a>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="top-bar">
+            <div class="search-box">
+                <input type="text" placeholder="Search pings or friends...">
+            </div>
+            <div class="user-notif">🔔 ✉️</div>
         </div>
 
-        <div class="card">
-            <h2>Upcoming Reminders</h2>
-            <div id="reminderList">
+        <div class="content-grid">
+            <section>
+                <h2 style="margin-top:0">Active Pings</h2>
+                <div id="reminderList">
+                    </div>
+            </section>
+
+            <section>
+                <div class="glass-card">
+                    <h3 style="margin-top:0">New Ping 🤝</h3>
+                    <div class="ping-input">
+                        <input type="text" id="taskInput" placeholder="What's the plan?">
+                        <input type="text" id="friendInput" placeholder="Tag friend (@name)">
+                    </div>
+                    <button id="addBtn" class="btn-ping">Send Ping</button>
                 </div>
+            </section>
         </div>
-    </div>
+    </main>
 
     <script type="module" src="app.js"></script>
 </body>
