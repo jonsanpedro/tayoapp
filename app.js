@@ -32,15 +32,18 @@ document.getElementById('addBtn').addEventListener('click', async () => {
     }
 });
 
-// Logic para i-DISPLAY ang data (Real-time!)
 onSnapshot(remindersCol, (snapshot) => {
     const list = document.getElementById('reminderList');
     list.innerHTML = "";
     snapshot.forEach(doc => {
         const data = doc.data();
+        // Gagamit tayo ng OR (||) para kung sakaling iba ang spelling sa DB
+        const task = data.task_name || data.task || "No Task";
+        const friend = data.tagged_friend || data.friend || "No Friend";
+        
         list.innerHTML += `<div class="card">
-            <b>${data.task_name}</b><br>
-            Tagged: ${data.tagged_friend}
+            <b>${task}</b><br>
+            Tagged: ${friend}
         </div>`;
     });
 });
